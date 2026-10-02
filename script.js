@@ -1,168 +1,603 @@
-// ========================================
-// STUDENT STUDY PLANNER - SCRIPT.JS
-// ========================================
+/* ========================================
+   STUDENT STUDY PLANNER
+   SCRIPT.JS
+======================================== */
 
 
-// Run when the page loads
-document.addEventListener("DOMContentLoaded", function () {
-    displayTasks();
-});
+/* ========================================
+   PAGE LOAD
+======================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        displayTasks();
+
+        displaySubjects();
+
+        updateDashboardStats();
+
+    }
+);
 
 
-// ========================================
-// ADD TASK
-// ========================================
+/* ========================================
+   TASKS
+======================================== */
+
+
+/* Add Task */
 
 function addTask() {
 
-    const taskInput = document.getElementById("taskInput");
+    const taskInput =
+        document.getElementById("taskInput");
 
-    // Make sure the input exists
+
     if (!taskInput) {
         return;
     }
 
-    const taskText = taskInput.value.trim();
 
-    // Don't allow empty tasks
+    const taskText =
+        taskInput.value.trim();
+
+
     if (taskText === "") {
-        alert("Please enter a task.");
+
+        alert(
+            "Please enter a task."
+        );
+
         return;
     }
 
-    // Get existing tasks
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    // Create new task
+    let tasks =
+        JSON.parse(
+            localStorage.getItem("tasks")
+        ) || [];
+
+
     const newTask = {
+
         text: taskText,
+
         completed: false
+
     };
 
-    // Add task to the list
+
     tasks.push(newTask);
 
-    // Save tasks
-    localStorage.setItem("tasks", JSON.stringify(tasks));
 
-    // Clear input
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+
     taskInput.value = "";
 
-    // Update the screen
+
     displayTasks();
+
+    updateDashboardStats();
+
 }
 
 
-// ========================================
-// DISPLAY TASKS
-// ========================================
+/* Display Tasks */
 
 function displayTasks() {
 
-    const taskList = document.getElementById("taskList");
+    const taskList =
+        document.getElementById(
+            "taskList"
+        );
 
-    // If we are not on the dashboard page
+
     if (!taskList) {
         return;
     }
 
-    // Clear current list
+
     taskList.innerHTML = "";
 
-    // Get saved tasks
-    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-    // Show message if there are no tasks
+    const tasks =
+        JSON.parse(
+            localStorage.getItem("tasks")
+        ) || [];
+
+
     if (tasks.length === 0) {
 
-        const emptyMessage = document.createElement("li");
+        const message =
+            document.createElement("li");
 
-        emptyMessage.textContent = "No tasks yet. Add your first task!";
 
-        taskList.appendChild(emptyMessage);
+        message.textContent =
+            "No tasks yet. Add your first task!";
+
+
+        taskList.appendChild(message);
+
 
         return;
     }
 
 
-    // Create each task
-    tasks.forEach(function (task, index) {
+    tasks.forEach(
+        function (task, index) {
 
-        const li = document.createElement("li");
+            const li =
+                document.createElement("li");
 
-        // Task text
-        const taskText = document.createElement("span");
 
-        taskText.textContent =
-            (task.completed ? "✅ " : "⬜ ") + task.text;
+            const taskText =
+                document.createElement("span");
 
-        taskText.style.cursor = "pointer";
 
-        // Completed task style
-        if (task.completed) {
-            taskText.style.textDecoration = "line-through";
-            taskText.style.color = "#888";
+            taskText.textContent =
+                (
+                    task.completed
+                        ? "✅ "
+                        : "⬜ "
+                ) + task.text;
+
+
+            taskText.style.cursor =
+                "pointer";
+
+
+            if (task.completed) {
+
+                taskText.style.textDecoration =
+                    "line-through";
+
+                taskText.style.color =
+                    "#888";
+
+            }
+
+
+            taskText.onclick =
+                function () {
+
+                    toggleTask(index);
+
+                };
+
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            deleteButton.textContent =
+                "Delete";
+
+
+            deleteButton.className =
+                "delete-btn";
+
+
+            deleteButton.onclick =
+                function () {
+
+                    deleteTask(index);
+
+                };
+
+
+            li.appendChild(
+                taskText
+            );
+
+
+            li.appendChild(
+                deleteButton
+            );
+
+
+            taskList.appendChild(
+                li
+            );
+
         }
+    );
 
-        // Click task to complete/uncomplete
-        taskText.onclick = function () {
-            toggleTask(index);
-        };
-
-
-        // Delete button
-        const deleteButton = document.createElement("button");
-
-        deleteButton.textContent = "Delete";
-
-        deleteButton.onclick = function () {
-            deleteTask(index);
-        };
-
-
-        // Add elements to task
-        li.appendChild(taskText);
-        li.appendChild(deleteButton);
-
-        // Add task to list
-        taskList.appendChild(li);
-    });
 }
 
 
-// ========================================
-// COMPLETE / UNCOMPLETE TASK
-// ========================================
+/* Complete / Uncomplete Task */
 
 function toggleTask(index) {
 
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    let tasks =
+        JSON.parse(
+            localStorage.getItem("tasks")
+        ) || [];
 
-    // Change completed status
-    tasks[index].completed = !tasks[index].completed;
 
-    // Save updated tasks
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if (!tasks[index]) {
+        return;
+    }
 
-    // Update display
+
+    tasks[index].completed =
+        !tasks[index].completed;
+
+
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+
     displayTasks();
+
+    updateDashboardStats();
+
 }
 
 
-// ========================================
-// DELETE TASK
-// ========================================
+/* Delete Task */
 
 function deleteTask(index) {
 
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    let tasks =
+        JSON.parse(
+            localStorage.getItem("tasks")
+        ) || [];
 
-    // Remove task
+
     tasks.splice(index, 1);
 
-    // Save updated list
-    localStorage.setItem("tasks", JSON.stringify(tasks));
 
-    // Update display
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+
     displayTasks();
+
+    updateDashboardStats();
+
+}
+
+
+/* ========================================
+   SUBJECTS
+======================================== */
+
+
+/* Add Subject */
+
+function addSubject() {
+
+    const subjectInput =
+        document.getElementById(
+            "subjectInput"
+        );
+
+
+    if (!subjectInput) {
+        return;
+    }
+
+
+    const subjectName =
+        subjectInput.value.trim();
+
+
+    if (subjectName === "") {
+
+        alert(
+            "Please enter a subject."
+        );
+
+        return;
+    }
+
+
+    let subjects =
+        JSON.parse(
+            localStorage.getItem(
+                "subjects"
+            )
+        ) || [];
+
+
+    subjects.push(subjectName);
+
+
+    localStorage.setItem(
+        "subjects",
+        JSON.stringify(subjects)
+    );
+
+
+    subjectInput.value = "";
+
+
+    displaySubjects();
+
+    updateDashboardStats();
+
+}
+
+
+/* Display Subjects */
+
+function displaySubjects() {
+
+    const subjectList =
+        document.getElementById(
+            "subjectList"
+        );
+
+
+    if (!subjectList) {
+        return;
+    }
+
+
+    subjectList.innerHTML = "";
+
+
+    const subjects =
+        JSON.parse(
+            localStorage.getItem(
+                "subjects"
+            )
+        ) || [];
+
+
+    if (subjects.length === 0) {
+
+        const message =
+            document.createElement("li");
+
+
+        message.textContent =
+            "No subjects yet. Add your first subject!";
+
+
+        subjectList.appendChild(
+            message
+        );
+
+
+        return;
+    }
+
+
+    subjects.forEach(
+        function (subject, index) {
+
+            const li =
+                document.createElement(
+                    "li"
+                );
+
+
+            const name =
+                document.createElement(
+                    "span"
+                );
+
+
+            name.textContent =
+                "📚 " + subject;
+
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            deleteButton.textContent =
+                "Delete";
+
+
+            deleteButton.className =
+                "delete-btn";
+
+
+            deleteButton.onclick =
+                function () {
+
+                    deleteSubject(index);
+
+                };
+
+
+            li.appendChild(name);
+
+            li.appendChild(deleteButton);
+
+
+            subjectList.appendChild(li);
+
+        }
+    );
+
+}
+
+
+/* Delete Subject */
+
+function deleteSubject(index) {
+
+    let subjects =
+        JSON.parse(
+            localStorage.getItem(
+                "subjects"
+            )
+        ) || [];
+
+
+    subjects.splice(index, 1);
+
+
+    localStorage.setItem(
+        "subjects",
+        JSON.stringify(subjects)
+    );
+
+
+    displaySubjects();
+
+    updateDashboardStats();
+
+}
+
+
+/* ========================================
+   DASHBOARD STATISTICS
+======================================== */
+
+function updateDashboardStats() {
+
+
+    /* Get Tasks */
+
+    const tasks =
+        JSON.parse(
+            localStorage.getItem("tasks")
+        ) || [];
+
+
+    /* Get Subjects */
+
+    const subjects =
+        JSON.parse(
+            localStorage.getItem("subjects")
+        ) || [];
+
+
+    /* Task Information */
+
+    const totalTasks =
+        tasks.length;
+
+
+    const completedTasks =
+        tasks.filter(
+            function (task) {
+
+                return task.completed;
+
+            }
+        ).length;
+
+
+    const pendingTasks =
+        totalTasks -
+        completedTasks;
+
+
+    /* Progress */
+
+    let progress = 0;
+
+
+    if (totalTasks > 0) {
+
+        progress =
+            Math.round(
+                (
+                    completedTasks /
+                    totalTasks
+                ) * 100
+            );
+
+    }
+
+
+    /* Subject Count */
+
+    const subjectCount =
+        document.getElementById(
+            "subjectCount"
+        );
+
+
+    if (subjectCount) {
+
+        subjectCount.textContent =
+            subjects.length +
+            (
+                subjects.length === 1
+                    ? " Subject"
+                    : " Subjects"
+            );
+
+    }
+
+
+    /* Pending Tasks */
+
+    const pendingCount =
+        document.getElementById(
+            "pendingCount"
+        );
+
+
+    if (pendingCount) {
+
+        pendingCount.textContent =
+            pendingTasks +
+            (
+                pendingTasks === 1
+                    ? " Pending Task"
+                    : " Pending Tasks"
+            );
+
+    }
+
+
+    /* Today's Plan */
+
+    const todayCount =
+        document.getElementById(
+            "todayCount"
+        );
+
+
+    if (todayCount) {
+
+        todayCount.textContent =
+            totalTasks +
+            (
+                totalTasks === 1
+                    ? " Task Planned"
+                    : " Tasks Planned"
+            );
+
+    }
+
+
+    /* Progress */
+
+    const progressCount =
+        document.getElementById(
+            "progressCount"
+        );
+
+
+    if (progressCount) {
+
+        progressCount.textContent =
+            progress +
+            "% Completed";
+
+    }
+
 }
