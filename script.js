@@ -16,11 +16,12 @@ document.addEventListener(
 
         displaySubjects();
 
+        displaySchedules();
+
         updateDashboardStats();
 
     }
 );
-
 
 /* ========================================
    TASKS
