@@ -600,6 +600,18 @@ function updateDashboardStats() {
             "% Completed";
 
     }
+   const progressFill =
+    document.getElementById(
+        "progressFill"
+    );
+
+
+if (progressFill) {
+
+    progressFill.style.width =
+        progress + "%";
+
+}
 
 }
 /* ========================================
