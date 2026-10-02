@@ -2,15 +2,25 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Study Planner Dashboard</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
+
 <body>
+
+
+    <!-- Navigation -->
 
     <nav class="navbar">
 
@@ -19,52 +29,141 @@
         </div>
 
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="dashboard.html">Dashboard</a>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
         </div>
 
     </nav>
 
 
-    <section class="dashboard">
 
-        <h1>Welcome to Your Study Planner 👋</h1>
+    <!-- Dashboard -->
+
+    <main class="dashboard">
+
+
+        <h1>
+            Welcome to Your Study Planner 👋
+        </h1>
+
 
         <p class="dashboard-subtitle">
             Organize your studies and stay on track.
         </p>
 
 
+
+        <!-- Statistics -->
+
         <div class="dashboard-cards">
 
-            <div class="dashboard-card">
-                <h3>📚 Subjects</h3>
-                <p>0 Subjects</p>
-            </div>
 
             <div class="dashboard-card">
-                <h3>✅ Tasks</h3>
-                <p>0 Pending Tasks</p>
+
+                <h3>
+                    📚 Subjects
+                </h3>
+
+                <p id="subjectCount">
+                    0 Subjects
+                </p>
+
             </div>
 
-            <div class="dashboard-card">
-                <h3>📅 Today's Plan</h3>
-                <p>No tasks planned</p>
-            </div>
+
 
             <div class="dashboard-card">
-                <h3>📊 Progress</h3>
-                <p>0% Completed</p>
+
+                <h3>
+                    ✅ Tasks
+                </h3>
+
+                <p id="pendingCount">
+                    0 Pending Tasks
+                </p>
+
             </div>
+
+
+
+            <div class="dashboard-card">
+
+                <h3>
+                    📅 Today's Plan
+                </h3>
+
+                <p id="todayCount">
+                    0 Tasks Planned
+                </p>
+
+            </div>
+
+
+
+            <div class="dashboard-card">
+
+                <h3>
+                    📊 Progress
+                </h3>
+
+                <p id="progressCount">
+                    0% Completed
+                </p>
+
+            </div>
+
 
         </div>
 
 
-        <div class="task-section">
 
-            <h2>My Tasks</h2>
+        <!-- Subject Section -->
 
-            <div class="task-input">
+        <section class="planner-section">
+
+            <h2>
+                📚 My Subjects
+            </h2>
+
+
+            <div class="input-area">
+
+                <input
+                    type="text"
+                    id="subjectInput"
+                    placeholder="Enter a subject..."
+                >
+
+                <button onclick="addSubject()">
+                    Add Subject
+                </button>
+
+            </div>
+
+
+            <ul id="subjectList"></ul>
+
+        </section>
+
+
+
+        <!-- Task Section -->
+
+        <section class="planner-section">
+
+            <h2>
+                ✅ My Tasks
+            </h2>
+
+
+            <div class="input-area">
 
                 <input
                     type="text"
@@ -78,14 +177,21 @@
 
             </div>
 
+
             <ul id="taskList"></ul>
 
-        </div>
+        </section>
 
-    </section>
 
+
+    </main>
+
+
+
+    <!-- JavaScript -->
 
     <script src="script.js"></script>
+
 
 </body>
 
