@@ -1,7 +1,23 @@
 /* ========================================
    STUDENT STUDY PLANNER
-   SCRIPT.JS
+   MAIN JAVASCRIPT
 ======================================== */
+
+
+/* ========================================
+   DATA
+======================================== */
+
+let tasks =
+    JSON.parse(
+        localStorage.getItem("tasks")
+    ) || [];
+
+
+let schedules =
+    JSON.parse(
+        localStorage.getItem("schedules")
+    ) || [];
 
 
 /* ========================================
@@ -12,19 +28,20 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        displayTasks();
+        loadTasks();
 
-        displaySubjects();
-
-        displaySchedules();
+        loadSchedules();
 
         updateDashboardStats();
+
+        loadDarkMode();
 
     }
 );
 
+
 /* ========================================
-   TASKS
+   TASK MANAGEMENT
 ======================================== */
 
 
@@ -32,17 +49,14 @@ document.addEventListener(
 
 function addTask() {
 
-    const taskInput =
-        document.getElementById("taskInput");
-
-
-    if (!taskInput) {
-        return;
-    }
+    const input =
+        document.getElementById(
+            "taskInput"
+        );
 
 
     const taskText =
-        taskInput.value.trim();
+        input.value.trim();
 
 
     if (taskText === "") {
@@ -52,16 +66,13 @@ function addTask() {
         );
 
         return;
+
     }
 
 
-    let tasks =
-        JSON.parse(
-            localStorage.getItem("tasks")
-        ) || [];
+    const task = {
 
-
-    const newTask = {
+        id: Date.now(),
 
         text: taskText,
 
@@ -70,28 +81,23 @@ function addTask() {
     };
 
 
-    tasks.push(newTask);
+    tasks.push(task);
 
 
-    localStorage.setItem(
-        "tasks",
-        JSON.stringify(tasks)
-    );
+    saveTasks();
 
+    input.value = "";
 
-    taskInput.value = "";
-
-
-    displayTasks();
+    loadTasks();
 
     updateDashboardStats();
 
 }
 
 
-/* Display Tasks */
+/* Load Tasks */
 
-function displayTasks() {
+function loadTasks() {
 
     const taskList =
         document.getElementById(
@@ -100,113 +106,66 @@ function displayTasks() {
 
 
     if (!taskList) {
+
         return;
+
     }
 
 
     taskList.innerHTML = "";
 
 
-    const tasks =
-        JSON.parse(
-            localStorage.getItem("tasks")
-        ) || [];
-
-
     if (tasks.length === 0) {
 
-        const message =
-            document.createElement("li");
-
-
-        message.textContent =
-            "No tasks yet. Add your first task!";
-
-
-        taskList.appendChild(message);
-
+        taskList.innerHTML =
+            `<li class="empty-message">
+                No tasks yet. Add your first task!
+            </li>`;
 
         return;
+
     }
 
 
     tasks.forEach(
-        function (task, index) {
+        function (task) {
 
             const li =
-                document.createElement("li");
-
-
-            const taskText =
-                document.createElement("span");
-
-
-            taskText.textContent =
-                (
-                    task.completed
-                        ? "✅ "
-                        : "⬜ "
-                ) + task.text;
-
-
-            taskText.style.cursor =
-                "pointer";
-
-
-            if (task.completed) {
-
-                taskText.style.textDecoration =
-                    "line-through";
-
-                taskText.style.color =
-                    "#888";
-
-            }
-
-
-            taskText.onclick =
-                function () {
-
-                    toggleTask(index);
-
-                };
-
-
-            const deleteButton =
                 document.createElement(
-                    "button"
+                    "li"
                 );
 
 
-            deleteButton.textContent =
-                "Delete";
+            li.innerHTML = `
+
+                <div class="task-content">
+
+                    <input
+                        type="checkbox"
+                        ${task.completed ? "checked" : ""}
+                        onchange="toggleTask(${task.id})"
+                    >
+
+                    <span
+                        class="${task.completed ? "task-completed" : ""}"
+                    >
+                        ${escapeHTML(task.text)}
+                    </span>
+
+                </div>
 
 
-            deleteButton.className =
-                "delete-btn";
+                <button
+                    class="delete-btn"
+                    onclick="deleteTask(${task.id})"
+                >
+                    🗑️
+                </button>
+
+            `;
 
 
-            deleteButton.onclick =
-                function () {
-
-                    deleteTask(index);
-
-                };
-
-
-            li.appendChild(
-                taskText
-            );
-
-
-            li.appendChild(
-                deleteButton
-            );
-
-
-            taskList.appendChild(
-                li
-            );
+            taskList.appendChild(li);
 
         }
     );
@@ -216,30 +175,29 @@ function displayTasks() {
 
 /* Complete / Uncomplete Task */
 
-function toggleTask(index) {
+function toggleTask(id) {
 
-    let tasks =
-        JSON.parse(
-            localStorage.getItem("tasks")
-        ) || [];
+    const task =
+        tasks.find(
+            function (item) {
+
+                return item.id === id;
+
+            }
+        );
 
 
-    if (!tasks[index]) {
-        return;
+    if (task) {
+
+        task.completed =
+            !task.completed;
+
     }
 
 
-    tasks[index].completed =
-        !tasks[index].completed;
+    saveTasks();
 
-
-    localStorage.setItem(
-        "tasks",
-        JSON.stringify(tasks)
-    );
-
-
-    displayTasks();
+    loadTasks();
 
     updateDashboardStats();
 
@@ -248,214 +206,35 @@ function toggleTask(index) {
 
 /* Delete Task */
 
-function deleteTask(index) {
+function deleteTask(id) {
 
-    let tasks =
-        JSON.parse(
-            localStorage.getItem("tasks")
-        ) || [];
+    tasks =
+        tasks.filter(
+            function (task) {
+
+                return task.id !== id;
+
+            }
+        );
 
 
-    tasks.splice(index, 1);
+    saveTasks();
 
+    loadTasks();
+
+    updateDashboardStats();
+
+}
+
+
+/* Save Tasks */
+
+function saveTasks() {
 
     localStorage.setItem(
         "tasks",
         JSON.stringify(tasks)
     );
-
-
-    displayTasks();
-
-    updateDashboardStats();
-
-}
-
-
-/* ========================================
-   SUBJECTS
-======================================== */
-
-
-/* Add Subject */
-
-function addSubject() {
-
-    const subjectInput =
-        document.getElementById(
-            "subjectInput"
-        );
-
-
-    if (!subjectInput) {
-        return;
-    }
-
-
-    const subjectName =
-        subjectInput.value.trim();
-
-
-    if (subjectName === "") {
-
-        alert(
-            "Please enter a subject."
-        );
-
-        return;
-    }
-
-
-    let subjects =
-        JSON.parse(
-            localStorage.getItem(
-                "subjects"
-            )
-        ) || [];
-
-
-    subjects.push(subjectName);
-
-
-    localStorage.setItem(
-        "subjects",
-        JSON.stringify(subjects)
-    );
-
-
-    subjectInput.value = "";
-
-
-    displaySubjects();
-
-    updateDashboardStats();
-
-}
-
-
-/* Display Subjects */
-
-function displaySubjects() {
-
-    const subjectList =
-        document.getElementById(
-            "subjectList"
-        );
-
-
-    if (!subjectList) {
-        return;
-    }
-
-
-    subjectList.innerHTML = "";
-
-
-    const subjects =
-        JSON.parse(
-            localStorage.getItem(
-                "subjects"
-            )
-        ) || [];
-
-
-    if (subjects.length === 0) {
-
-        const message =
-            document.createElement("li");
-
-
-        message.textContent =
-            "No subjects yet. Add your first subject!";
-
-
-        subjectList.appendChild(
-            message
-        );
-
-
-        return;
-    }
-
-
-    subjects.forEach(
-        function (subject, index) {
-
-            const li =
-                document.createElement(
-                    "li"
-                );
-
-
-            const name =
-                document.createElement(
-                    "span"
-                );
-
-
-            name.textContent =
-                "📚 " + subject;
-
-
-            const deleteButton =
-                document.createElement(
-                    "button"
-                );
-
-
-            deleteButton.textContent =
-                "Delete";
-
-
-            deleteButton.className =
-                "delete-btn";
-
-
-            deleteButton.onclick =
-                function () {
-
-                    deleteSubject(index);
-
-                };
-
-
-            li.appendChild(name);
-
-            li.appendChild(deleteButton);
-
-
-            subjectList.appendChild(li);
-
-        }
-    );
-
-}
-
-
-/* Delete Subject */
-
-function deleteSubject(index) {
-
-    let subjects =
-        JSON.parse(
-            localStorage.getItem(
-                "subjects"
-            )
-        ) || [];
-
-
-    subjects.splice(index, 1);
-
-
-    localStorage.setItem(
-        "subjects",
-        JSON.stringify(subjects)
-    );
-
-
-    displaySubjects();
-
-    updateDashboardStats();
 
 }
 
@@ -466,28 +245,50 @@ function deleteSubject(index) {
 
 function updateDashboardStats() {
 
-
-    /* Get Tasks */
-
-    const tasks =
-        JSON.parse(
-            localStorage.getItem("tasks")
-        ) || [];
+    const taskCount =
+        document.getElementById(
+            "taskCount"
+        );
 
 
-    /* Get Subjects */
-
-    const subjects =
-        JSON.parse(
-            localStorage.getItem("subjects")
-        ) || [];
+    const completedCount =
+        document.getElementById(
+            "completedCount"
+        );
 
 
-    /* Task Information */
+    const progressCount =
+        document.getElementById(
+            "progressCount"
+        );
 
-    const totalTasks =
-        tasks.length;
 
+    const progressFill =
+        document.getElementById(
+            "progressFill"
+        );
+
+
+    const subjectCount =
+        document.getElementById(
+            "subjectCount"
+        );
+
+
+    /* Tasks */
+
+    if (taskCount) {
+
+        taskCount.textContent =
+            tasks.length +
+            (tasks.length === 1
+                ? " Task"
+                : " Tasks");
+
+    }
+
+
+    /* Completed */
 
     const completedTasks =
         tasks.filter(
@@ -499,9 +300,13 @@ function updateDashboardStats() {
         ).length;
 
 
-    const pendingTasks =
-        totalTasks -
-        completedTasks;
+    if (completedCount) {
+
+        completedCount.textContent =
+            completedTasks +
+            " Completed";
+
+    }
 
 
     /* Progress */
@@ -509,88 +314,16 @@ function updateDashboardStats() {
     let progress = 0;
 
 
-    if (totalTasks > 0) {
+    if (tasks.length > 0) {
 
         progress =
             Math.round(
-                (
-                    completedTasks /
-                    totalTasks
-                ) * 100
+                (completedTasks /
+                    tasks.length) *
+                100
             );
 
     }
-
-
-    /* Subject Count */
-
-    const subjectCount =
-        document.getElementById(
-            "subjectCount"
-        );
-
-
-    if (subjectCount) {
-
-        subjectCount.textContent =
-            subjects.length +
-            (
-                subjects.length === 1
-                    ? " Subject"
-                    : " Subjects"
-            );
-
-    }
-
-
-    /* Pending Tasks */
-
-    const pendingCount =
-        document.getElementById(
-            "pendingCount"
-        );
-
-
-    if (pendingCount) {
-
-        pendingCount.textContent =
-            pendingTasks +
-            (
-                pendingTasks === 1
-                    ? " Pending Task"
-                    : " Pending Tasks"
-            );
-
-    }
-
-
-    /* Today's Plan */
-
-    const todayCount =
-        document.getElementById(
-            "todayCount"
-        );
-
-
-    if (todayCount) {
-
-        todayCount.textContent =
-            totalTasks +
-            (
-                totalTasks === 1
-                    ? " Task Planned"
-                    : " Tasks Planned"
-            );
-
-    }
-
-
-    /* Progress */
-
-    const progressCount =
-        document.getElementById(
-            "progressCount"
-        );
 
 
     if (progressCount) {
@@ -600,126 +333,130 @@ function updateDashboardStats() {
             "% Completed";
 
     }
-   const progressFill =
-    document.getElementById(
-        "progressFill"
-    );
 
 
-if (progressFill) {
+    if (progressFill) {
 
-    progressFill.style.width =
-        progress + "%";
+        progressFill.style.width =
+            progress + "%";
+
+    }
+
+
+    /* Subjects */
+
+    const uniqueSubjects =
+        [
+            ...new Set(
+                schedules.map(
+                    function (item) {
+
+                        return item.subject;
+
+                    }
+                )
+            )
+        ];
+
+
+    if (subjectCount) {
+
+        subjectCount.textContent =
+            uniqueSubjects.length +
+            (
+                uniqueSubjects.length === 1
+                    ? " Subject"
+                    : " Subjects"
+            );
+
+    }
 
 }
 
-}
+
 /* ========================================
    STUDY SCHEDULE
 ======================================== */
 
 
-/* Add Schedule */
+/* Add Study Session */
 
 function addSchedule() {
 
     const subject =
         document.getElementById(
-            "scheduleSubject"
-        ).value.trim();
-
-
-    const topic =
-        document.getElementById(
-            "scheduleTopic"
+            "subjectInput"
         ).value.trim();
 
 
     const date =
         document.getElementById(
-            "scheduleDate"
+            "dateInput"
         ).value;
 
 
     const time =
         document.getElementById(
-            "scheduleTime"
+            "timeInput"
         ).value;
 
 
+    const topic =
+        document.getElementById(
+            "topicInput"
+        ).value.trim();
+
+
+    /* Validation */
+
     if (
         subject === "" ||
-        topic === "" ||
         date === "" ||
-        time === ""
+        time === "" ||
+        topic === ""
     ) {
 
         alert(
-            "Please fill in all schedule details."
+            "Please fill in all the fields."
         );
 
         return;
+
     }
 
 
-    let schedules =
-        JSON.parse(
-            localStorage.getItem(
-                "schedules"
-            )
-        ) || [];
+    const schedule = {
 
-
-    const newSchedule = {
+        id: Date.now(),
 
         subject: subject,
 
-        topic: topic,
-
         date: date,
 
-        time: time
+        time: time,
+
+        topic: topic
 
     };
 
 
-    schedules.push(newSchedule);
+    schedules.push(schedule);
 
 
-    localStorage.setItem(
-        "schedules",
-        JSON.stringify(schedules)
-    );
+    saveSchedules();
 
+    clearScheduleForm();
 
-    document.getElementById(
-        "scheduleSubject"
-    ).value = "";
+    loadSchedules();
 
-
-    document.getElementById(
-        "scheduleTopic"
-    ).value = "";
-
-
-    document.getElementById(
-        "scheduleDate"
-    ).value = "";
-
-
-    document.getElementById(
-        "scheduleTime"
-    ).value = "";
-
-
-    displaySchedules();
+    updateDashboardStats();
 
 }
 
 
-/* Display Schedule */
+/* Load Schedule */
 
-function displaySchedules() {
+function loadSchedules() {
 
     const scheduleList =
         document.getElementById(
@@ -728,141 +465,108 @@ function displaySchedules() {
 
 
     if (!scheduleList) {
+
         return;
+
     }
 
 
     scheduleList.innerHTML = "";
 
 
-    const schedules =
-        JSON.parse(
-            localStorage.getItem(
-                "schedules"
-            )
-        ) || [];
-
-
     if (schedules.length === 0) {
 
-        const message =
-            document.createElement("p");
+        scheduleList.innerHTML =
+            `
+            <div class="empty-message">
 
+                📅 No study sessions yet.
 
-        message.textContent =
-            "No study sessions planned yet.";
+                <br>
 
+                Add your first study session above!
 
-        message.style.color =
-            "#666";
-
-
-        scheduleList.appendChild(
-            message
-        );
-
+            </div>
+            `;
 
         return;
+
     }
 
 
-    schedules.forEach(
-        function (schedule, index) {
+    /* Sort by date and time */
 
-            const item =
+    const sortedSchedules =
+        [...schedules].sort(
+            function (a, b) {
+
+                const first =
+                    new Date(
+                        a.date +
+                        "T" +
+                        a.time
+                    );
+
+
+                const second =
+                    new Date(
+                        b.date +
+                        "T" +
+                        b.time
+                    );
+
+
+                return first - second;
+
+            }
+        );
+
+
+    sortedSchedules.forEach(
+        function (schedule) {
+
+            const div =
                 document.createElement(
                     "div"
                 );
 
 
-            item.className =
+            div.className =
                 "schedule-item";
 
 
-            const info =
-                document.createElement(
-                    "div"
-                );
+            div.innerHTML = `
+
+                <div class="schedule-info">
+
+                    <h3>
+                        📚 ${escapeHTML(schedule.subject)}
+                    </h3>
+
+                    <p class="schedule-date">
+                        📅 ${formatDate(schedule.date)}
+                        &nbsp; | &nbsp;
+                        ⏰ ${schedule.time}
+                    </p>
+
+                    <p>
+                        📝 ${escapeHTML(schedule.topic)}
+                    </p>
+
+                </div>
 
 
-            info.className =
-                "schedule-info";
+                <button
+                    class="schedule-delete"
+                    onclick="deleteSchedule(${schedule.id})"
+                >
+                    🗑️ Delete
+                </button>
+
+            `;
 
 
-            const title =
-                document.createElement(
-                    "h3"
-                );
-
-
-            title.textContent =
-                "📚 " +
-                schedule.subject;
-
-
-            const topic =
-                document.createElement(
-                    "p"
-                );
-
-
-            topic.textContent =
-                "📝 " +
-                schedule.topic;
-
-
-            const date =
-                document.createElement(
-                    "p"
-                );
-
-
-            date.textContent =
-                "📅 " +
-                schedule.date +
-                "  ⏰ " +
-                schedule.time;
-
-
-            info.appendChild(title);
-
-            info.appendChild(topic);
-
-            info.appendChild(date);
-
-
-            const deleteButton =
-                document.createElement(
-                    "button"
-                );
-
-
-            deleteButton.textContent =
-                "Delete";
-
-
-            deleteButton.className =
-                "delete-btn";
-
-
-            deleteButton.onclick =
-                function () {
-
-                    deleteSchedule(index);
-
-                };
-
-
-            item.appendChild(info);
-
-            item.appendChild(
-                deleteButton
-            );
-
-
-            scheduleList.appendChild(
-                item
-            );
+            scheduleList.appendChild(div);
 
         }
     );
@@ -872,25 +576,152 @@ function displaySchedules() {
 
 /* Delete Schedule */
 
-function deleteSchedule(index) {
+function deleteSchedule(id) {
 
-    let schedules =
-        JSON.parse(
-            localStorage.getItem(
-                "schedules"
-            )
-        ) || [];
+    schedules =
+        schedules.filter(
+            function (schedule) {
+
+                return schedule.id !== id;
+
+            }
+        );
 
 
-    schedules.splice(index, 1);
+    saveSchedules();
 
+    loadSchedules();
+
+    updateDashboardStats();
+
+}
+
+
+/* Save Schedule */
+
+function saveSchedules() {
 
     localStorage.setItem(
         "schedules",
         JSON.stringify(schedules)
     );
 
+}
 
-    displaySchedules();
+
+/* Clear Form */
+
+function clearScheduleForm() {
+
+    document.getElementById(
+        "subjectInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "dateInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "timeInput"
+    ).value = "";
+
+
+    document.getElementById(
+        "topicInput"
+    ).value = "";
+
+}
+
+
+/* ========================================
+   DATE FORMATTING
+======================================== */
+
+function formatDate(dateString) {
+
+    const date =
+        new Date(
+            dateString + "T00:00:00"
+        );
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+
+            month: "short",
+
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* ========================================
+   DARK MODE
+======================================== */
+
+function toggleDarkMode() {
+
+    document.body.classList.toggle(
+        "dark-mode"
+    );
+
+
+    const isDark =
+        document.body.classList.contains(
+            "dark-mode"
+        );
+
+
+    localStorage.setItem(
+        "darkMode",
+        isDark
+    );
+
+}
+
+
+/* Load Dark Mode */
+
+function loadDarkMode() {
+
+    const darkMode =
+        localStorage.getItem(
+            "darkMode"
+        );
+
+
+    if (darkMode === "true") {
+
+        document.body.classList.add(
+            "dark-mode"
+        );
+
+    }
+
+}
+
+
+/* ========================================
+   SECURITY HELPER
+======================================== */
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent = text;
+
+
+    return div.innerHTML;
 
 }
