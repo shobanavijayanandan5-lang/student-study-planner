@@ -601,3 +601,283 @@ function updateDashboardStats() {
     }
 
 }
+/* ========================================
+   STUDY SCHEDULE
+======================================== */
+
+
+/* Add Schedule */
+
+function addSchedule() {
+
+    const subject =
+        document.getElementById(
+            "scheduleSubject"
+        ).value.trim();
+
+
+    const topic =
+        document.getElementById(
+            "scheduleTopic"
+        ).value.trim();
+
+
+    const date =
+        document.getElementById(
+            "scheduleDate"
+        ).value;
+
+
+    const time =
+        document.getElementById(
+            "scheduleTime"
+        ).value;
+
+
+    if (
+        subject === "" ||
+        topic === "" ||
+        date === "" ||
+        time === ""
+    ) {
+
+        alert(
+            "Please fill in all schedule details."
+        );
+
+        return;
+    }
+
+
+    let schedules =
+        JSON.parse(
+            localStorage.getItem(
+                "schedules"
+            )
+        ) || [];
+
+
+    const newSchedule = {
+
+        subject: subject,
+
+        topic: topic,
+
+        date: date,
+
+        time: time
+
+    };
+
+
+    schedules.push(newSchedule);
+
+
+    localStorage.setItem(
+        "schedules",
+        JSON.stringify(schedules)
+    );
+
+
+    document.getElementById(
+        "scheduleSubject"
+    ).value = "";
+
+
+    document.getElementById(
+        "scheduleTopic"
+    ).value = "";
+
+
+    document.getElementById(
+        "scheduleDate"
+    ).value = "";
+
+
+    document.getElementById(
+        "scheduleTime"
+    ).value = "";
+
+
+    displaySchedules();
+
+}
+
+
+/* Display Schedule */
+
+function displaySchedules() {
+
+    const scheduleList =
+        document.getElementById(
+            "scheduleList"
+        );
+
+
+    if (!scheduleList) {
+        return;
+    }
+
+
+    scheduleList.innerHTML = "";
+
+
+    const schedules =
+        JSON.parse(
+            localStorage.getItem(
+                "schedules"
+            )
+        ) || [];
+
+
+    if (schedules.length === 0) {
+
+        const message =
+            document.createElement("p");
+
+
+        message.textContent =
+            "No study sessions planned yet.";
+
+
+        message.style.color =
+            "#666";
+
+
+        scheduleList.appendChild(
+            message
+        );
+
+
+        return;
+    }
+
+
+    schedules.forEach(
+        function (schedule, index) {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "schedule-item";
+
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+
+            info.className =
+                "schedule-info";
+
+
+            const title =
+                document.createElement(
+                    "h3"
+                );
+
+
+            title.textContent =
+                "📚 " +
+                schedule.subject;
+
+
+            const topic =
+                document.createElement(
+                    "p"
+                );
+
+
+            topic.textContent =
+                "📝 " +
+                schedule.topic;
+
+
+            const date =
+                document.createElement(
+                    "p"
+                );
+
+
+            date.textContent =
+                "📅 " +
+                schedule.date +
+                "  ⏰ " +
+                schedule.time;
+
+
+            info.appendChild(title);
+
+            info.appendChild(topic);
+
+            info.appendChild(date);
+
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            deleteButton.textContent =
+                "Delete";
+
+
+            deleteButton.className =
+                "delete-btn";
+
+
+            deleteButton.onclick =
+                function () {
+
+                    deleteSchedule(index);
+
+                };
+
+
+            item.appendChild(info);
+
+            item.appendChild(
+                deleteButton
+            );
+
+
+            scheduleList.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* Delete Schedule */
+
+function deleteSchedule(index) {
+
+    let schedules =
+        JSON.parse(
+            localStorage.getItem(
+                "schedules"
+            )
+        ) || [];
+
+
+    schedules.splice(index, 1);
+
+
+    localStorage.setItem(
+        "schedules",
+        JSON.stringify(schedules)
+    );
+
+
+    displaySchedules();
+
+}
