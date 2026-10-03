@@ -983,3 +983,24 @@ footer {
     }
 
 }
+/* =====================================================
+   SAVED STUDY PLAN
+===================================================== */
+
+.saved-plan {
+    margin-top: 25px;
+    padding: 20px;
+    background: #f8f9ff;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+}
+
+.saved-plan h3 {
+    color: #272757;
+    margin-bottom: 15px;
+}
+
+.saved-plan p {
+    color: #666;
+    margin-bottom: 8px;
+}
