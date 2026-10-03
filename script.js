@@ -1,21 +1,32 @@
-// ==========================================
-// STUDENT STUDY PLANNER - SCRIPT
-// ==========================================
+// ======================================================
+// STUDENT STUDY PLANNER
+// COMPLETE JAVASCRIPT FILE
+// ======================================================
 
 
-// ---------- TASK MANAGER ----------
+// ======================================================
+// TASK MANAGER
+// ======================================================
 
+// Get task elements
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 
 
-// Get saved tasks
+// Get saved tasks from browser
 let tasks = JSON.parse(localStorage.getItem("studyTasks")) || [];
 
 
-// Display tasks
+// ======================================================
+// DISPLAY TASKS
+// ======================================================
+
 function displayTasks() {
+
+    if (!taskList) {
+        return;
+    }
 
     taskList.innerHTML = "";
 
@@ -44,55 +55,14 @@ function displayTasks() {
         taskList.appendChild(li);
 
     });
+
 }
 
 
-// Add new task
-function addTask() {
+// ======================================================
+// SAVE TASKS
+// ======================================================
 
-    const text = taskInput.value.trim();
-
-    if (text === "") {
-        alert("Please enter a task.");
-        return;
-    }
-
-    tasks.push({
-        text: text,
-        completed: false
-    });
-
-    saveTasks();
-
-    taskInput.value = "";
-
-    displayTasks();
-}
-
-
-// Complete / Undo task
-function completeTask(index) {
-
-    tasks[index].completed = !tasks[index].completed;
-
-    saveTasks();
-
-    displayTasks();
-}
-
-
-// Delete task
-function deleteTask(index) {
-
-    tasks.splice(index, 1);
-
-    saveTasks();
-
-    displayTasks();
-}
-
-
-// Save tasks
 function saveTasks() {
 
     localStorage.setItem(
@@ -103,64 +73,197 @@ function saveTasks() {
 }
 
 
-// Add task button
+// ======================================================
+// ADD TASK
+// ======================================================
+
+function addTask() {
+
+    if (!taskInput) {
+        return;
+    }
+
+    const text = taskInput.value.trim();
+
+
+    if (text === "") {
+
+        alert("Please enter a task.");
+
+        return;
+    }
+
+
+    // Create new task
+    const newTask = {
+
+        text: text,
+
+        completed: false
+
+    };
+
+
+    // Add task
+    tasks.push(newTask);
+
+
+    // Save task
+    saveTasks();
+
+
+    // Clear input
+    taskInput.value = "";
+
+
+    // Update page
+    displayTasks();
+
+    updateDashboard();
+
+}
+
+
+// ======================================================
+// COMPLETE / UNDO TASK
+// ======================================================
+
+function completeTask(index) {
+
+    if (!tasks[index]) {
+        return;
+    }
+
+
+    tasks[index].completed =
+        !tasks[index].completed;
+
+
+    saveTasks();
+
+
+    displayTasks();
+
+    updateDashboard();
+
+}
+
+
+// ======================================================
+// DELETE TASK
+// ======================================================
+
+function deleteTask(index) {
+
+    if (!tasks[index]) {
+        return;
+    }
+
+
+    tasks.splice(index, 1);
+
+
+    saveTasks();
+
+
+    displayTasks();
+
+    updateDashboard();
+
+}
+
+
+// ======================================================
+// ADD TASK BUTTON
+// ======================================================
+
 if (addTaskBtn) {
 
-    addTaskBtn.addEventListener("click", addTask);
+    addTaskBtn.addEventListener(
+        "click",
+        addTask
+    );
 
 }
 
 
-// Press Enter to add task
+// ======================================================
+// PRESS ENTER TO ADD TASK
+// ======================================================
+
 if (taskInput) {
 
-    taskInput.addEventListener("keypress", function(event) {
+    taskInput.addEventListener(
+        "keypress",
+        function(event) {
 
-        if (event.key === "Enter") {
-            addTask();
+            if (event.key === "Enter") {
+
+                addTask();
+
+            }
+
         }
-
-    });
+    );
 
 }
 
 
-// Display saved tasks when page opens
-displayTasks();
-
-
-// ==========================================
+// ======================================================
 // SUBJECT MANAGER
-// ==========================================
+// ======================================================
 
-const subjectInput = document.getElementById("subjectInput");
-const addSubjectBtn = document.getElementById("addSubjectBtn");
-const subjectList = document.getElementById("subjectList");
+
+// Get subject elements
+const subjectInput =
+    document.getElementById("subjectInput");
+
+const addSubjectBtn =
+    document.getElementById("addSubjectBtn");
+
+const subjectList =
+    document.getElementById("subjectList");
 
 
 // Get saved subjects
 let subjects =
-    JSON.parse(localStorage.getItem("studySubjects")) || [];
+    JSON.parse(
+        localStorage.getItem("studySubjects")
+    ) || [];
 
 
-// Display subjects
+// ======================================================
+// DISPLAY SUBJECTS
+// ======================================================
+
 function displaySubjects() {
 
-    if (!subjectList) return;
+    if (!subjectList) {
+        return;
+    }
+
 
     subjectList.innerHTML = "";
 
+
     subjects.forEach(function(subject, index) {
 
-        const li = document.createElement("li");
+        const li =
+            document.createElement("li");
+
 
         li.innerHTML = `
-            <span>${subject}</span>
+
+            <span>
+                ${subject}
+            </span>
 
             <button onclick="deleteSubject(${index})">
                 Delete
             </button>
+
         `;
+
 
         subjectList.appendChild(li);
 
@@ -169,48 +272,84 @@ function displaySubjects() {
 }
 
 
-// Add subject
+// ======================================================
+// ADD SUBJECT
+// ======================================================
+
 function addSubject() {
 
-    if (!subjectInput) return;
-
-    const subject = subjectInput.value.trim();
-
-    if (subject === "") {
-        alert("Please enter a subject.");
+    if (!subjectInput) {
         return;
     }
 
+
+    const subject =
+        subjectInput.value.trim();
+
+
+    if (subject === "") {
+
+        alert("Please enter a subject.");
+
+        return;
+
+    }
+
+
+    // Add subject
     subjects.push(subject);
 
+
+    // Save subjects
     localStorage.setItem(
         "studySubjects",
         JSON.stringify(subjects)
     );
 
+
+    // Clear input
     subjectInput.value = "";
 
+
+    // Update page
     displaySubjects();
+
+    updateDashboard();
 
 }
 
 
-// Delete subject
+// ======================================================
+// DELETE SUBJECT
+// ======================================================
+
 function deleteSubject(index) {
+
+    if (!subjects[index]) {
+        return;
+    }
+
 
     subjects.splice(index, 1);
 
+
     localStorage.setItem(
         "studySubjects",
         JSON.stringify(subjects)
     );
 
+
     displaySubjects();
+
+    updateDashboard();
 
 }
 
 
-// Add subject button
+// ======================================================
+// ADD SUBJECT BUTTON
+// ======================================================
+
 if (addSubjectBtn) {
 
     addSubjectBtn.addEventListener(
@@ -221,142 +360,271 @@ if (addSubjectBtn) {
 }
 
 
-// Display subjects when page opens
+// ======================================================
+// INITIAL SUBJECT DISPLAY
+// ======================================================
+
 displaySubjects();
 
 
-// ==========================================
+// ======================================================
 // STUDY PLANNER
-// ==========================================
+// ======================================================
 
-const studyForm = document.getElementById("studyForm");
+
+// Get study form
+const studyForm =
+    document.getElementById("studyForm");
+
 
 if (studyForm) {
 
-    studyForm.addEventListener("submit", function(event) {
+    studyForm.addEventListener(
+        "submit",
+        function(event) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        const subject =
-            document.getElementById("studySubject").value;
 
-        const date =
-            document.getElementById("studyDate").value;
+            const studySubject =
+                document.getElementById(
+                    "studySubject"
+                );
 
-        const time =
-            document.getElementById("studyTime").value;
 
-        if (
-            subject === "" ||
-            date === "" ||
-            time === ""
-        ) {
+            const studyDate =
+                document.getElementById(
+                    "studyDate"
+                );
 
-            alert("Please fill all study plan details.");
 
-            return;
+            const studyTime =
+                document.getElementById(
+                    "studyTime"
+                );
+
+
+            if (
+                !studySubject ||
+                !studyDate ||
+                !studyTime
+            ) {
+
+                return;
+
+            }
+
+
+            const subject =
+                studySubject.value;
+
+
+            const date =
+                studyDate.value;
+
+
+            const time =
+                studyTime.value;
+
+
+            if (
+                subject === "" ||
+                date === "" ||
+                time === ""
+            ) {
+
+                alert(
+                    "Please fill all study plan details."
+                );
+
+                return;
+
+            }
+
+
+            // Create study plan
+            const studyPlan = {
+
+                subject: subject,
+
+                date: date,
+
+                time: time
+
+            };
+
+
+            // Save study plan
+            localStorage.setItem(
+                "studyPlan",
+                JSON.stringify(studyPlan)
+            );
+
+
+            alert(
+                "Study plan saved successfully!"
+            );
 
         }
+    );
+
+}
 
 
-        const studyPlan = {
+// ======================================================
+// DASHBOARD
+// ======================================================
 
-            subject: subject,
-            date: date,
-            time: time
-
-        };
+function updateDashboard() {
 
 
-        localStorage.setItem(
-            "studyPlan",
-            JSON.stringify(studyPlan)
+    // -------------------------------
+    // TASK COUNT
+    // -------------------------------
+
+    const totalTasks =
+        tasks.length;
+
+
+    // -------------------------------
+    // COMPLETED TASK COUNT
+    // -------------------------------
+
+    const completedTasks =
+        tasks.filter(
+            function(task) {
+
+                return task.completed;
+
+            }
+        ).length;
+
+
+    // -------------------------------
+    // PROGRESS
+    // -------------------------------
+
+    let progress = 0;
+
+
+    if (totalTasks > 0) {
+
+        progress =
+            Math.round(
+                (completedTasks / totalTasks) * 100
+            );
+
+    }
+
+
+    // -------------------------------
+    // GET DASHBOARD ELEMENTS
+    // -------------------------------
+
+    const taskCount =
+        document.getElementById(
+            "taskCount"
         );
 
 
-        alert("Study plan saved successfully!");
+    const completedCount =
+        document.getElementById(
+            "completedCount"
+        );
 
-    });
+
+    const progressCount =
+        document.getElementById(
+            "progressCount"
+        );
+
+
+    const progressBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    const subjectCount =
+        document.getElementById(
+            "subjectCount"
+        );
+
+
+    // -------------------------------
+    // UPDATE TASK COUNT
+    // -------------------------------
+
+    if (taskCount) {
+
+        taskCount.textContent =
+            totalTasks + " Tasks";
+
+    }
+
+
+    // -------------------------------
+    // UPDATE COMPLETED COUNT
+    // -------------------------------
+
+    if (completedCount) {
+
+        completedCount.textContent =
+            completedTasks + " Completed";
+
+    }
+
+
+    // -------------------------------
+    // UPDATE PROGRESS TEXT
+    // -------------------------------
+
+    if (progressCount) {
+
+        progressCount.textContent =
+            progress + "% Completed";
+
+    }
+
+
+    // -------------------------------
+    // UPDATE PROGRESS BAR
+    // -------------------------------
+
+    if (progressBar) {
+
+        progressBar.style.width =
+            progress + "%";
+
+    }
+
+
+    // -------------------------------
+    // UPDATE SUBJECT COUNT
+    // -------------------------------
+
+    if (subjectCount) {
+
+        subjectCount.textContent =
+            subjects.length + " Subjects";
+
+    }
 
 }
 
 
-// ==========================================
-// PROGRESS TRACKING
-// ==========================================
-
-function updateProgress() {
-
-    const totalTasks = tasks.length;
-
-    const completedTasks =
-        tasks.filter(function(task) {
-            return task.completed;
-        }).length;
+// ======================================================
+// INITIAL PAGE LOAD
+// ======================================================
 
 
-    const progressElement =
-        document.getElementById("progress");
-
-    const completedElement =
-        document.getElementById("completedTasks");
-
-    const totalElement =
-        document.getElementById("totalTasks");
+// Display saved tasks
+displayTasks();
 
 
-    if (totalElement) {
-
-        totalElement.textContent = totalTasks;
-
-    }
+// Display saved subjects
+displaySubjects();
 
 
-    if (completedElement) {
-
-        completedElement.textContent =
-            completedTasks;
-
-    }
-
-
-    if (progressElement) {
-
-        if (totalTasks === 0) {
-
-            progressElement.textContent = "0%";
-
-        } else {
-
-            const percentage =
-                Math.round(
-                    (completedTasks / totalTasks) * 100
-                );
-
-            progressElement.textContent =
-                percentage + "%";
-
-        }
-
-    }
-
-}
-
-
-// Update progress whenever tasks change
-const originalSaveTasks = saveTasks;
-
-saveTasks = function() {
-
-    localStorage.setItem(
-        "studyTasks",
-        JSON.stringify(tasks)
-    );
-
-    updateProgress();
-
-};
-
-
-// Initial progress
-updateProgress();
+// Update dashboard
+updateDashboard();
