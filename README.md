@@ -47,3 +47,16 @@ student-study-planner/
 ├── style.css
 ├── script.js
 └── README.md
+## 📸 Screenshots
+
+### 🏠 Homepage
+
+![Homepage](homepage.png)
+
+### 📅 Study Schedule
+
+![Study Schedule](study-schedule.png)
+
+### 💻 GitHub Repository
+
+![GitHub Repository](github-repository.png)
