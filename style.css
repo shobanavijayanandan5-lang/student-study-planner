@@ -892,3 +892,94 @@ footer {
     }
 
 }
+/* =========================
+   SUBJECTS
+========================= */
+
+.subject-section {
+    background: white;
+    padding: 30px;
+    margin-top: 30px;
+    border-radius: 12px;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.subject-section h2 {
+    margin-bottom: 20px;
+    color: #272757;
+}
+
+.subject-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.subject-input input {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.subject-input button {
+    padding: 14px 25px;
+    background: #5b5bd6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.subject-input button:hover {
+    background: #4444b8;
+}
+
+#subjectList {
+    list-style: none;
+    padding: 0;
+}
+
+#subjectList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f8f9ff;
+    border-radius: 8px;
+    border: 1px solid #eeeeee;
+}
+
+.subject-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.delete-subject {
+    padding: 8px 14px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-subject:hover {
+    background: #c0392b;
+}
+
+@media (max-width: 600px) {
+
+    .subject-input {
+        flex-direction: column;
+    }
+
+    .subject-input button {
+        width: 100%;
+    }
+
+}
