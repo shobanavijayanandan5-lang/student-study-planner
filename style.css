@@ -1,6 +1,12 @@
-/* ========================================
-   RESET
-======================================== */
+/* =====================================================
+   STUDENT STUDY PLANNER
+   COMPLETE CSS
+===================================================== */
+
+
+/* =====================================================
+   GLOBAL STYLES
+===================================================== */
 
 * {
     margin: 0;
@@ -8,107 +14,259 @@
     box-sizing: border-box;
 }
 
-
 html {
     scroll-behavior: smooth;
 }
 
-
 body {
     font-family: Arial, sans-serif;
-
     background: #f8f9ff;
-
     color: #222;
-
-    transition:
-        background 0.3s ease,
-        color 0.3s ease;
+    line-height: 1.6;
 }
 
 
-/* ========================================
-   NAVIGATION
-======================================== */
+/* =====================================================
+   NAVIGATION BAR
+===================================================== */
 
 .navbar {
     height: 70px;
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     padding: 0 8%;
-
     background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 
-    box-shadow:
-        0 2px 10px
-        rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
-
 
 .logo {
     font-size: 24px;
-
     font-weight: bold;
-
     color: #5b5bd6;
 }
 
-
 .nav-links {
     display: flex;
-
-    align-items: center;
-
     gap: 30px;
 }
 
-
 .nav-links a {
     text-decoration: none;
-
     color: #333;
-
     font-weight: 500;
+    transition: 0.3s;
 }
-
 
 .nav-links a:hover {
     color: #5b5bd6;
 }
 
 
-/* ========================================
-   DARK MODE BUTTON
-======================================== */
+/* =====================================================
+   HERO SECTION
+===================================================== */
 
-.theme-btn {
-    border: none;
+.hero {
+    min-height: 600px;
 
-    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    text-align: center;
+
+    padding: 60px 20px;
+
+    background: linear-gradient(
+        135deg,
+        #eeeeff,
+        #ffffff
+    );
+}
+
+.hero-content {
+    max-width: 750px;
+}
+
+.hero h1 {
+    font-size: 60px;
+    line-height: 1.1;
+
+    margin-bottom: 25px;
+
+    color: #272757;
+}
+
+.hero p {
     font-size: 20px;
+    line-height: 1.7;
 
-    cursor: pointer;
+    color: #666;
 
-    padding: 5px;
+    margin-bottom: 35px;
 }
 
 
-/* ========================================
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.btn {
+    display: inline-block;
+
+    padding: 14px 30px;
+
+    background: #5b5bd6;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #4444b8;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   FEATURES SECTION
+===================================================== */
+
+.features {
+    padding: 80px 8%;
+
+    text-align: center;
+
+    background: white;
+}
+
+.features h2 {
+    font-size: 36px;
+
+    margin-bottom: 15px;
+}
+
+.section-text {
+    color: #666;
+
+    margin-bottom: 50px;
+}
+
+
+/* =====================================================
+   FEATURE CARDS
+===================================================== */
+
+.feature-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 25px;
+}
+
+.feature-card {
+    padding: 30px 20px;
+
+    border-radius: 12px;
+
+    background: #f8f9ff;
+
+    border: 1px solid #eeeeee;
+
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(0, 0, 0, 0.08);
+}
+
+.icon {
+    font-size: 40px;
+
+    margin-bottom: 15px;
+}
+
+.feature-card h3 {
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: #666;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   ABOUT SECTION
+===================================================== */
+
+.about {
+    padding: 80px 20%;
+
+    text-align: center;
+
+    background: #f8f9ff;
+}
+
+.about h2 {
+    font-size: 35px;
+
+    margin-bottom: 20px;
+}
+
+.about p {
+    color: #666;
+
+    line-height: 1.8;
+
+    font-size: 18px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    padding: 25px;
+
+    text-align: center;
+
+    background: #272757;
+
+    color: white;
+}
+
+
+/* =====================================================
    DASHBOARD
-======================================== */
+===================================================== */
 
 .dashboard {
     padding: 70px 8%;
 
     min-height: 80vh;
 }
-
 
 .dashboard h1 {
     font-size: 40px;
@@ -117,7 +275,6 @@ body {
 
     margin-bottom: 10px;
 }
-
 
 .dashboard-subtitle {
     color: #666;
@@ -128,9 +285,9 @@ body {
 }
 
 
-/* ========================================
+/* =====================================================
    DASHBOARD CARDS
-======================================== */
+===================================================== */
 
 .dashboard-cards {
     display: grid;
@@ -142,7 +299,6 @@ body {
 
     margin-bottom: 50px;
 }
-
 
 .dashboard-card {
     background: white;
@@ -160,42 +316,46 @@ body {
     transition: 0.3s;
 }
 
-
 .dashboard-card:hover {
     transform: translateY(-5px);
-}
 
+    box-shadow:
+        0 10px 25px
+        rgba(0, 0, 0, 0.08);
+}
 
 .dashboard-card h3 {
     margin-bottom: 15px;
-}
 
+    font-size: 22px;
+}
 
 .dashboard-card p {
     color: #666;
+
+    font-size: 18px;
 }
 
 
-/* ========================================
+/* =====================================================
    PROGRESS BAR
-======================================== */
+===================================================== */
 
 .progress-bar {
     width: 100%;
 
-    height: 10px;
+    height: 12px;
 
-    background: #e5e5f5;
+    background: #e4e4f5;
 
     border-radius: 10px;
 
-    margin-top: 15px;
+    margin-top: 20px;
 
     overflow: hidden;
 }
 
-
-.progress-fill {
+#progressBar {
     width: 0%;
 
     height: 100%;
@@ -209,9 +369,9 @@ body {
 }
 
 
-/* ========================================
+/* =====================================================
    TASK SECTION
-======================================== */
+===================================================== */
 
 .task-section {
     background: white;
@@ -222,21 +382,27 @@ body {
 
     border: 1px solid #eeeeee;
 
-    margin-bottom: 40px;
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.04);
 }
-
 
 .task-section h2 {
     margin-bottom: 20px;
+
+    color: #272757;
 }
 
+
+/* =====================================================
+   TASK INPUT
+===================================================== */
 
 .task-input {
     display: flex;
 
     gap: 10px;
 }
-
 
 .task-input input {
     flex: 1;
@@ -248,10 +414,205 @@ body {
     border-radius: 8px;
 
     font-size: 16px;
+
+    outline: none;
+}
+
+.task-input input:focus {
+    border-color: #5b5bd6;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(91, 91, 214, 0.1);
 }
 
 
+/* =====================================================
+   ADD TASK BUTTON
+===================================================== */
+
 .task-input button {
+    padding: 14px 25px;
+
+    background: #5b5bd6;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.task-input button:hover {
+    background: #4444b8;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   TASK LIST
+===================================================== */
+
+#taskList {
+    list-style: none;
+
+    margin-top: 25px;
+}
+
+#taskList li {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 15px;
+
+    margin-bottom: 10px;
+
+    background: #f8f9ff;
+
+    border-radius: 8px;
+
+    border: 1px solid #eeeeee;
+
+    transition: 0.3s;
+}
+
+#taskList li:hover {
+    box-shadow:
+        0 5px 12px
+        rgba(0, 0, 0, 0.06);
+}
+
+
+/* =====================================================
+   COMPLETED TASK
+===================================================== */
+
+.completed {
+    text-decoration: line-through;
+
+    color: #999;
+
+    opacity: 0.7;
+}
+
+
+/* =====================================================
+   TASK BUTTONS
+===================================================== */
+
+.task-buttons {
+    display: flex;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+.task-buttons button {
+    padding: 7px 12px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.task-buttons button:first-child {
+    background: #e6e6ff;
+
+    color: #4444b8;
+}
+
+.task-buttons button:first-child:hover {
+    background: #d7d7ff;
+}
+
+.task-buttons button:last-child {
+    background: #ffe5e5;
+
+    color: #c0392b;
+}
+
+.task-buttons button:last-child:hover {
+    background: #ffd1d1;
+}
+
+
+/* =====================================================
+   SUBJECT SECTION
+===================================================== */
+
+.subject-section {
+    background: white;
+
+    padding: 30px;
+
+    margin-top: 30px;
+
+    border-radius: 12px;
+
+    border: 1px solid #eeeeee;
+
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.04);
+}
+
+.subject-section h2 {
+    color: #272757;
+
+    margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   SUBJECT INPUT
+===================================================== */
+
+.subject-input {
+    display: flex;
+
+    gap: 10px;
+}
+
+.subject-input input {
+    flex: 1;
+
+    padding: 14px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+.subject-input input:focus {
+    border-color: #5b5bd6;
+}
+
+.subject-input button {
     padding: 14px 25px;
 
     background: #5b5bd6;
@@ -268,26 +629,22 @@ body {
 }
 
 
-.task-input button:hover {
-    background: #4444b8;
-}
+/* =====================================================
+   SUBJECT LIST
+===================================================== */
 
-
-#taskList {
+#subjectList {
     list-style: none;
 
     margin-top: 25px;
 }
 
-
-#taskList li {
+#subjectList li {
     display: flex;
-
-    align-items: center;
 
     justify-content: space-between;
 
-    gap: 10px;
+    align-items: center;
 
     padding: 15px;
 
@@ -296,144 +653,75 @@ body {
     background: #f8f9ff;
 
     border-radius: 8px;
+
+    border: 1px solid #eeeeee;
 }
 
+#subjectList button {
+    padding: 7px 12px;
 
-/* ========================================
-   TASK BUTTONS
-======================================== */
-
-.task-content {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    flex: 1;
-}
-
-
-.task-content span {
-    cursor: pointer;
-}
-
-
-.task-completed {
-    text-decoration: line-through;
-
-    color: #888;
-}
-
-
-.delete-btn {
     border: none;
-
-    background: #ffeded;
-
-    color: #d33;
-
-    padding: 7px 10px;
 
     border-radius: 6px;
 
+    background: #ffe5e5;
+
+    color: #c0392b;
+
     cursor: pointer;
 }
 
 
-/* ========================================
-   STUDY SCHEDULE
-======================================== */
+/* =====================================================
+   STUDY PLANNER
+===================================================== */
 
-.schedule-section {
+.study-section {
     background: white;
 
     padding: 30px;
+
+    margin-top: 30px;
 
     border-radius: 12px;
 
     border: 1px solid #eeeeee;
 
-    margin-bottom: 40px;
+    box-shadow:
+        0 5px 15px
+        rgba(0, 0, 0, 0.04);
 }
 
-
-.schedule-section h2 {
-    font-size: 28px;
-
+.study-section h2 {
     color: #272757;
 
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
+.study-section input,
+.study-section select {
+    width: 100%;
 
-.section-description {
-    color: #666;
-
-    margin-bottom: 25px;
-}
-
-
-/* ========================================
-   SCHEDULE FORM
-======================================== */
-
-.schedule-form {
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 20px;
-
-    padding: 25px;
-
-    background: #f8f9ff;
-
-    border-radius: 10px;
-
-    margin-bottom: 30px;
-}
-
-
-.form-group {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 8px;
-}
-
-
-.form-group label {
-    font-weight: bold;
-
-    color: #333;
-}
-
-
-.form-group input {
     padding: 13px;
+
+    margin-bottom: 15px;
 
     border: 1px solid #ddd;
 
     border-radius: 8px;
 
-    font-size: 15px;
+    font-size: 16px;
 
     outline: none;
 }
 
-
-.form-group input:focus {
+.study-section input:focus,
+.study-section select:focus {
     border-color: #5b5bd6;
 }
 
-
-.schedule-btn {
-    grid-column: 1 / -1;
-
-    padding: 14px;
+.study-section button {
+    padding: 13px 25px;
 
     background: #5b5bd6;
 
@@ -446,240 +734,23 @@ body {
     cursor: pointer;
 
     font-weight: bold;
-
-    font-size: 15px;
 }
 
-
-.schedule-btn:hover {
+.study-section button:hover {
     background: #4444b8;
 }
 
 
-/* ========================================
-   SCHEDULE LIST
-======================================== */
-
-.schedule-list {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 15px;
-}
-
-
-.schedule-item {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 20px;
-
-    padding: 20px;
-
-    background: #f8f9ff;
-
-    border-left: 5px solid #5b5bd6;
-
-    border-radius: 8px;
-}
-
-
-.schedule-info h3 {
-    margin-bottom: 8px;
-
-    color: #272757;
-}
-
-
-.schedule-info p {
-    color: #666;
-
-    margin-bottom: 5px;
-}
-
-
-.schedule-date {
-    font-weight: bold;
-
-    color: #5b5bd6 !important;
-}
-
-
-.schedule-delete {
-    border: none;
-
-    background: #ffeded;
-
-    color: #d33;
-
-    padding: 8px 12px;
-
-    border-radius: 6px;
-
-    cursor: pointer;
-}
-
-
-.empty-message {
-    text-align: center;
-
-    color: #888;
-
-    padding: 25px;
-}
-
-
-/* ========================================
-   FOOTER
-======================================== */
-
-footer {
-    padding: 25px;
-
-    text-align: center;
-
-    background: #272757;
-
-    color: white;
-}
-
-
-/* ========================================
-   DARK MODE
-======================================== */
-
-body.dark-mode {
-    background: #171724;
-
-    color: #eeeeee;
-}
-
-
-body.dark-mode .navbar {
-    background: #222235;
-}
-
-
-body.dark-mode .nav-links a {
-    color: #eeeeee;
-}
-
-
-body.dark-mode .dashboard h1 {
-    color: white;
-}
-
-
-body.dark-mode .dashboard-subtitle {
-    color: #bbbbbb;
-}
-
-
-body.dark-mode .dashboard-card {
-    background: #222235;
-
-    border-color: #33334a;
-}
-
-
-body.dark-mode .dashboard-card h3 {
-    color: white;
-}
-
-
-body.dark-mode .dashboard-card p {
-    color: #bbbbbb;
-}
-
-
-body.dark-mode .task-section {
-    background: #222235;
-
-    border-color: #33334a;
-}
-
-
-body.dark-mode .task-section h2 {
-    color: white;
-}
-
-
-body.dark-mode .task-input input {
-    background: #303044;
-
-    color: white;
-
-    border-color: #44445a;
-}
-
-
-body.dark-mode #taskList li {
-    background: #303044;
-
-    color: white;
-}
-
-
-body.dark-mode .schedule-section {
-    background: #222235;
-
-    border-color: #33334a;
-}
-
-
-body.dark-mode .schedule-section h2 {
-    color: white;
-}
-
-
-body.dark-mode .section-description {
-    color: #bbbbbb;
-}
-
-
-body.dark-mode .schedule-form {
-    background: #303044;
-}
-
-
-body.dark-mode .form-group label {
-    color: white;
-}
-
-
-body.dark-mode .form-group input {
-    background: #222235;
-
-    color: white;
-
-    border-color: #44445a;
-}
-
-
-body.dark-mode .schedule-item {
-    background: #303044;
-}
-
-
-body.dark-mode .schedule-info h3 {
-    color: white;
-}
-
-
-body.dark-mode .schedule-info p {
-    color: #bbbbbb;
-}
-
-
-/* ========================================
-   MOBILE
-======================================== */
-
-@media (max-width: 900px) {
+/* =====================================================
+   MOBILE RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .feature-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
 
     .dashboard-cards {
         grid-template-columns:
@@ -689,15 +760,79 @@ body.dark-mode .schedule-info p {
 }
 
 
-@media (max-width: 700px) {
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 800px) {
 
     .navbar {
         padding: 0 5%;
     }
 
+    .nav-links {
+        gap: 15px;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .feature-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .dashboard-cards {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .about {
+        padding: 60px 10%;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 500px) {
+
+    .navbar {
+        height: auto;
+
+        padding: 20px 5%;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
 
     .nav-links {
-        gap: 12px;
+        display: none;
+    }
+
+
+    .hero {
+        min-height: 500px;
+
+        padding: 40px 20px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+
+    .feature-container {
+        grid-template-columns: 1fr;
     }
 
 
@@ -705,45 +840,55 @@ body.dark-mode .schedule-info p {
         padding: 50px 5%;
     }
 
-
     .dashboard h1 {
         font-size: 32px;
     }
 
-
-    .schedule-form {
-        grid-template-columns: 1fr;
-    }
-
-
-    .schedule-btn {
-        grid-column: auto;
-    }
-
-
-    .schedule-item {
-        flex-direction: column;
-
-        align-items: flex-start;
-    }
-
-}
-
-
-@media (max-width: 500px) {
 
     .dashboard-cards {
         grid-template-columns: 1fr;
     }
 
 
-    .task-input {
+    .task-section,
+    .subject-section,
+    .study-section {
+        padding: 20px;
+    }
+
+
+    .task-input,
+    .subject-input {
         flex-direction: column;
     }
 
 
-    .nav-links a {
-        display: none;
+    .task-input button,
+    .subject-input button {
+        width: 100%;
+    }
+
+
+    #taskList li,
+    #subjectList li {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .task-buttons {
+        width: 100%;
+    }
+
+
+    .task-buttons button {
+        flex: 1;
+    }
+
+
+    .about {
+        padding: 50px 8%;
     }
 
 }
