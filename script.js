@@ -1,32 +1,24 @@
 // ======================================================
 // STUDENT STUDY PLANNER
-// COMPLETE JAVASCRIPT FILE
+// COMPLETE SCRIPT.JS
 // ======================================================
 
 
 // ======================================================
-// TASK MANAGER
+// TASKS
 // ======================================================
 
-// Get task elements
+let tasks = JSON.parse(localStorage.getItem("studyTasks")) || [];
+
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 
 
-// Get saved tasks from browser
-let tasks = JSON.parse(localStorage.getItem("studyTasks")) || [];
-
-
-// ======================================================
-// DISPLAY TASKS
-// ======================================================
-
+// Display Tasks
 function displayTasks() {
 
-    if (!taskList) {
-        return;
-    }
+    if (!taskList) return;
 
     taskList.innerHTML = "";
 
@@ -59,10 +51,68 @@ function displayTasks() {
 }
 
 
-// ======================================================
-// SAVE TASKS
-// ======================================================
+// Add Task
+function addTask() {
 
+    if (!taskInput) return;
+
+    const text = taskInput.value.trim();
+
+    if (text === "") {
+        alert("Please enter a task.");
+        return;
+    }
+
+    tasks.push({
+        text: text,
+        completed: false
+    });
+
+    saveTasks();
+
+    taskInput.value = "";
+
+    displayTasks();
+
+    updateDashboard();
+
+}
+
+
+// Complete Task
+function completeTask(index) {
+
+    if (!tasks[index]) return;
+
+    tasks[index].completed =
+        !tasks[index].completed;
+
+    saveTasks();
+
+    displayTasks();
+
+    updateDashboard();
+
+}
+
+
+// Delete Task
+function deleteTask(index) {
+
+    if (!tasks[index]) return;
+
+    tasks.splice(index, 1);
+
+    saveTasks();
+
+    displayTasks();
+
+    updateDashboard();
+
+}
+
+
+// Save Tasks
 function saveTasks() {
 
     localStorage.setItem(
@@ -73,110 +123,7 @@ function saveTasks() {
 }
 
 
-// ======================================================
-// ADD TASK
-// ======================================================
-
-function addTask() {
-
-    if (!taskInput) {
-        return;
-    }
-
-    const text = taskInput.value.trim();
-
-
-    if (text === "") {
-
-        alert("Please enter a task.");
-
-        return;
-    }
-
-
-    // Create new task
-    const newTask = {
-
-        text: text,
-
-        completed: false
-
-    };
-
-
-    // Add task
-    tasks.push(newTask);
-
-
-    // Save task
-    saveTasks();
-
-
-    // Clear input
-    taskInput.value = "";
-
-
-    // Update page
-    displayTasks();
-
-    updateDashboard();
-
-}
-
-
-// ======================================================
-// COMPLETE / UNDO TASK
-// ======================================================
-
-function completeTask(index) {
-
-    if (!tasks[index]) {
-        return;
-    }
-
-
-    tasks[index].completed =
-        !tasks[index].completed;
-
-
-    saveTasks();
-
-
-    displayTasks();
-
-    updateDashboard();
-
-}
-
-
-// ======================================================
-// DELETE TASK
-// ======================================================
-
-function deleteTask(index) {
-
-    if (!tasks[index]) {
-        return;
-    }
-
-
-    tasks.splice(index, 1);
-
-
-    saveTasks();
-
-
-    displayTasks();
-
-    updateDashboard();
-
-}
-
-
-// ======================================================
-// ADD TASK BUTTON
-// ======================================================
-
+// Add Task Button
 if (addTaskBtn) {
 
     addTaskBtn.addEventListener(
@@ -187,10 +134,7 @@ if (addTaskBtn) {
 }
 
 
-// ======================================================
-// PRESS ENTER TO ADD TASK
-// ======================================================
-
+// Press Enter to Add Task
 if (taskInput) {
 
     taskInput.addEventListener(
@@ -198,9 +142,7 @@ if (taskInput) {
         function(event) {
 
             if (event.key === "Enter") {
-
                 addTask();
-
             }
 
         }
@@ -210,11 +152,15 @@ if (taskInput) {
 
 
 // ======================================================
-// SUBJECT MANAGER
+// SUBJECTS
 // ======================================================
 
+let subjects =
+    JSON.parse(
+        localStorage.getItem("studySubjects")
+    ) || [];
 
-// Get subject elements
+
 const subjectInput =
     document.getElementById("subjectInput");
 
@@ -225,45 +171,28 @@ const subjectList =
     document.getElementById("subjectList");
 
 
-// Get saved subjects
-let subjects =
-    JSON.parse(
-        localStorage.getItem("studySubjects")
-    ) || [];
-
-
-// ======================================================
-// DISPLAY SUBJECTS
-// ======================================================
-
+// Display Subjects
 function displaySubjects() {
 
-    if (!subjectList) {
-        return;
-    }
-
+    if (!subjectList) return;
 
     subjectList.innerHTML = "";
 
-
     subjects.forEach(function(subject, index) {
 
-        const li =
-            document.createElement("li");
-
+        const li = document.createElement("li");
 
         li.innerHTML = `
-
-            <span>
-                ${subject}
+            <span class="subject-name">
+                📚 ${subject}
             </span>
 
-            <button onclick="deleteSubject(${index})">
+            <button
+                class="delete-subject"
+                onclick="deleteSubject(${index})">
                 Delete
             </button>
-
         `;
-
 
         subjectList.appendChild(li);
 
@@ -272,46 +201,27 @@ function displaySubjects() {
 }
 
 
-// ======================================================
-// ADD SUBJECT
-// ======================================================
-
+// Add Subject
 function addSubject() {
 
-    if (!subjectInput) {
-        return;
-    }
-
+    if (!subjectInput) return;
 
     const subject =
         subjectInput.value.trim();
-
 
     if (subject === "") {
 
         alert("Please enter a subject.");
 
         return;
-
     }
 
-
-    // Add subject
     subjects.push(subject);
 
+    saveSubjects();
 
-    // Save subjects
-    localStorage.setItem(
-        "studySubjects",
-        JSON.stringify(subjects)
-    );
-
-
-    // Clear input
     subjectInput.value = "";
 
-
-    // Update page
     displaySubjects();
 
     updateDashboard();
@@ -319,25 +229,14 @@ function addSubject() {
 }
 
 
-// ======================================================
-// DELETE SUBJECT
-// ======================================================
-
+// Delete Subject
 function deleteSubject(index) {
 
-    if (!subjects[index]) {
-        return;
-    }
-
+    if (!subjects[index]) return;
 
     subjects.splice(index, 1);
 
-
-    localStorage.setItem(
-        "studySubjects",
-        JSON.stringify(subjects)
-    );
-
+    saveSubjects();
 
     displaySubjects();
 
@@ -346,10 +245,18 @@ function deleteSubject(index) {
 }
 
 
-// ======================================================
-// ADD SUBJECT BUTTON
-// ======================================================
+// Save Subjects
+function saveSubjects() {
 
+    localStorage.setItem(
+        "studySubjects",
+        JSON.stringify(subjects)
+    );
+
+}
+
+
+// Add Subject Button
 if (addSubjectBtn) {
 
     addSubjectBtn.addEventListener(
@@ -360,19 +267,27 @@ if (addSubjectBtn) {
 }
 
 
+// Press Enter to Add Subject
+if (subjectInput) {
+
+    subjectInput.addEventListener(
+        "keypress",
+        function(event) {
+
+            if (event.key === "Enter") {
+                addSubject();
+            }
+
+        }
+    );
+
+}
+
+
 // ======================================================
-// INITIAL SUBJECT DISPLAY
+// STUDY PLAN
 // ======================================================
 
-displaySubjects();
-
-
-// ======================================================
-// STUDY PLANNER
-// ======================================================
-
-
-// Get study form
 const studyForm =
     document.getElementById("studyForm");
 
@@ -385,23 +300,14 @@ if (studyForm) {
 
             event.preventDefault();
 
-
             const studySubject =
-                document.getElementById(
-                    "studySubject"
-                );
-
+                document.getElementById("studySubject");
 
             const studyDate =
-                document.getElementById(
-                    "studyDate"
-                );
-
+                document.getElementById("studyDate");
 
             const studyTime =
-                document.getElementById(
-                    "studyTime"
-                );
+                document.getElementById("studyTime");
 
 
             if (
@@ -409,19 +315,15 @@ if (studyForm) {
                 !studyDate ||
                 !studyTime
             ) {
-
                 return;
-
             }
 
 
             const subject =
                 studySubject.value;
 
-
             const date =
                 studyDate.value;
-
 
             const time =
                 studyTime.value;
@@ -438,11 +340,9 @@ if (studyForm) {
                 );
 
                 return;
-
             }
 
 
-            // Create study plan
             const studyPlan = {
 
                 subject: subject,
@@ -454,7 +354,6 @@ if (studyForm) {
             };
 
 
-            // Save study plan
             localStorage.setItem(
                 "studyPlan",
                 JSON.stringify(studyPlan)
@@ -478,34 +377,27 @@ if (studyForm) {
 function updateDashboard() {
 
 
-    // -------------------------------
-    // TASK COUNT
-    // -------------------------------
-
+    // Total Tasks
     const totalTasks =
         tasks.length;
 
 
-    // -------------------------------
-    // COMPLETED TASK COUNT
-    // -------------------------------
-
+    // Completed Tasks
     const completedTasks =
-        tasks.filter(
-            function(task) {
+        tasks.filter(function(task) {
 
-                return task.completed;
+            return task.completed;
 
-            }
-        ).length;
+        }).length;
 
 
-    // -------------------------------
-    // PROGRESS
-    // -------------------------------
+    // Total Subjects
+    const totalSubjects =
+        subjects.length;
 
+
+    // Progress
     let progress = 0;
-
 
     if (totalTasks > 0) {
 
@@ -517,43 +409,35 @@ function updateDashboard() {
     }
 
 
-    // -------------------------------
-    // GET DASHBOARD ELEMENTS
-    // -------------------------------
-
-    const taskCount =
-        document.getElementById(
-            "taskCount"
-        );
-
-
-    const completedCount =
-        document.getElementById(
-            "completedCount"
-        );
-
-
-    const progressCount =
-        document.getElementById(
-            "progressCount"
-        );
-
-
-    const progressBar =
-        document.getElementById(
-            "progressBar"
-        );
-
+    // Dashboard Elements
 
     const subjectCount =
-        document.getElementById(
-            "subjectCount"
-        );
+        document.getElementById("subjectCount");
+
+    const taskCount =
+        document.getElementById("taskCount");
+
+    const completedCount =
+        document.getElementById("completedCount");
+
+    const progressCount =
+        document.getElementById("progressCount");
+
+    const progressBar =
+        document.getElementById("progressBar");
 
 
-    // -------------------------------
-    // UPDATE TASK COUNT
-    // -------------------------------
+    // Subjects
+
+    if (subjectCount) {
+
+        subjectCount.textContent =
+            totalSubjects + " Subjects";
+
+    }
+
+
+    // Tasks
 
     if (taskCount) {
 
@@ -563,9 +447,7 @@ function updateDashboard() {
     }
 
 
-    // -------------------------------
-    // UPDATE COMPLETED COUNT
-    // -------------------------------
+    // Completed
 
     if (completedCount) {
 
@@ -575,9 +457,7 @@ function updateDashboard() {
     }
 
 
-    // -------------------------------
-    // UPDATE PROGRESS TEXT
-    // -------------------------------
+    // Progress Text
 
     if (progressCount) {
 
@@ -587,26 +467,12 @@ function updateDashboard() {
     }
 
 
-    // -------------------------------
-    // UPDATE PROGRESS BAR
-    // -------------------------------
+    // Progress Bar
 
     if (progressBar) {
 
         progressBar.style.width =
             progress + "%";
-
-    }
-
-
-    // -------------------------------
-    // UPDATE SUBJECT COUNT
-    // -------------------------------
-
-    if (subjectCount) {
-
-        subjectCount.textContent =
-            subjects.length + " Subjects";
 
     }
 
@@ -617,14 +483,8 @@ function updateDashboard() {
 // INITIAL PAGE LOAD
 // ======================================================
 
-
-// Display saved tasks
 displayTasks();
 
-
-// Display saved subjects
 displaySubjects();
 
-
-// Update dashboard
 updateDashboard();
