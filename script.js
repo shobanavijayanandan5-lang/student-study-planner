@@ -358,7 +358,7 @@ if (studyForm) {
                 "studyPlan",
                 JSON.stringify(studyPlan)
             );
-
+            displayStudyPlan();
 
             alert(
                 "Study plan saved successfully!"
@@ -477,7 +477,51 @@ function updateDashboard() {
     }
 
 }
+// ======================================================
+// DISPLAY SAVED STUDY PLAN
+// ======================================================
 
+function displayStudyPlan() {
+
+    const savedPlan =
+        JSON.parse(
+            localStorage.getItem("studyPlan")
+        );
+
+    const planContainer =
+        document.getElementById("savedStudyPlan");
+
+    if (!planContainer || !savedPlan) {
+        return;
+    }
+
+    planContainer.innerHTML = `
+        <div class="saved-plan">
+
+            <h3>📖 Your Study Plan</h3>
+
+            <p>
+                <strong>Subject:</strong>
+                ${savedPlan.subject}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                ${savedPlan.date}
+            </p>
+
+            <p>
+                <strong>Time:</strong>
+                ${savedPlan.time}
+            </p>
+
+        </div>
+    `;
+}
+
+
+// Show saved plan when page opens
+displayStudyPlan();
 
 // ======================================================
 // INITIAL PAGE LOAD
