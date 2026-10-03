@@ -4,7 +4,7 @@ A responsive web application designed to help students organize their subjects, 
 
 ## 🌐 Live Demo
 
-[View Live Website](YOUR_GITHUB_PAGES_LINK)
+[View Live Website](https://shobanavijayanandan5-lang.github.io/student-study-planner/)
 
 ## 📌 About the Project
 
